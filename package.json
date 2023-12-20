@@ -3,6 +3,7 @@
   "displayName": "Notes",
   "description": "Markdown notepad",
   "version": "0.0.1",
+  "repository": "https://github.com/morria/vscode-notes-extension",
   "engines": {
     "vscode": "^1.85.0"
   },
