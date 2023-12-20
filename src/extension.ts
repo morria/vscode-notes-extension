@@ -21,8 +21,23 @@ export function activate(context: vscode.ExtensionContext) {
 		const workspaceRoot = workspaceFolders[0].uri.fsPath;
 		const filePath = path.join(workspaceRoot, dateString);
 
-		fs.mkdirSync(path.dirname(filePath), { recursive: true });
-		fs.writeFileSync(filePath, `# ${monthNames[month - 1]} ${day}, ${year}\n\n`, { flag: 'wx' });
+
+		try {
+			fs.mkdirSync(path.dirname(filePath), { recursive: true });
+		} catch (err) {
+			const error = err as NodeJS.ErrnoException;
+			if (error.code !== 'EEXIST') {
+				throw error;
+			}
+		}
+		try {
+			fs.writeFileSync(filePath, `# ${monthNames[month - 1]} ${day}, ${year}\n\n`, { flag: 'wx' });
+		} catch (err) {
+			const error = err as NodeJS.ErrnoException;
+			if (error.code !== 'EEXIST') {
+				throw error;
+			}
+		}
 
 		const fileUri = vscode.Uri.file(filePath);
 		const document = await vscode.workspace.openTextDocument(fileUri);
